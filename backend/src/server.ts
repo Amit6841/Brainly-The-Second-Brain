@@ -24,8 +24,7 @@ app.use(cookieParser())
 // CORS configuration
 const corsOptions = {
     origin: [
-        'https://brainly-the-second-brain-client.vercel.app',
-        'http://localhost:5173'
+        'https://brainly-the-second-brain-client.vercel.app'
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
