@@ -11,12 +11,8 @@ import dotenv from "dotenv";
 dotenv.config()
 
 const app = express();
-const PORT = process.env.PORT || 5000;
-
-connectDB()
 
 // Middleware
-
 app.use(express.json())
 app.use(
     bodyParser.urlencoded({
@@ -24,9 +20,14 @@ app.use(
     })
 )
 app.use(cookieParser())
-app.use(cors({ origin:"http://localhost:5173", credentials: true }));
+app.use(cors({ 
+    origin: process.env.FRONTEND_URL || "http://localhost:5173", 
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
+}));
 
-
+// Routes
 app.use("/api/user", userRouter);
 app.use("/api/content", contentRouter);
 app.use("/api/brain", shareRouter);
@@ -42,7 +43,30 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     res.status(500).json({ message: "Internal Server Error" });
 });
 
-// Start the server
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
+// Connect to MongoDB and start server only in development
+if (process.env.NODE_ENV !== 'production') {
+    connectDB()
+        .then(() => {
+            const PORT = process.env.PORT || 5000;
+            app.listen(PORT, () => {
+                console.log(`Server is running on http://localhost:${PORT}`);
+            });
+        })
+        .catch((error) => {
+            console.error('Failed to connect to MongoDB:', error);
+            process.exit(1);
+        });
+} else {
+    // In production (serverless), connect to MongoDB for each request
+    app.use(async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            await connectDB();
+            next();
+        } catch (error) {
+            console.error('Database connection error:', error);
+            res.status(500).json({ message: 'Database connection error' });
+        }
+    });
+}
+
+export default app;
