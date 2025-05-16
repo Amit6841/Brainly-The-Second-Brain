@@ -9,7 +9,7 @@ import connectDB from "./config/db"
 import dotenv from "dotenv";
 
 dotenv.config()
-
+const Port = process.env.PORT;
 const app = express();
 
 // Middleware
@@ -22,6 +22,7 @@ app.use(
 app.use(cookieParser())
 
 // CORS configuration
+<<<<<<< HEAD
 const corsOptions = {
     origin: function (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) {
         const allowedOrigins = [
@@ -42,12 +43,15 @@ const corsOptions = {
     exposedHeaders: ['Set-Cookie'],
     maxAge: 86400 // 24 hours
 };
+=======
+const allowOrigin= ["https://brainly-the-second-brain-client.vercel.app"]
+>>>>>>> d8d59f8f8612cd51bce11ea45f6d155e0709eb1d
 
 // Enable CORS for all routes
-app.use(cors(corsOptions));
-
-// Handle preflight requests
-app.options('*', cors(corsOptions));
+app.use(cors({
+    origin: allowedOrigin ,
+    credentials: true,
+}));
 
 // Routes
 app.use("/api/user", userRouter);

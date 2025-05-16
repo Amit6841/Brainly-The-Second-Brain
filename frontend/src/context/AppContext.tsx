@@ -5,7 +5,7 @@ import axios from "axios";
 
 // Configure axios defaults
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL || "https://backend-gules-six-36.vercel.app";
 
 // Create axios instance with default config
 const axiosInstance = axios.create({
