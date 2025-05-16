@@ -22,34 +22,12 @@ app.use(
 app.use(cookieParser())
 
 // CORS configuration
-<<<<<<< HEAD
-const corsOptions = {
-    origin: function (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) {
-        const allowedOrigins = [
-            'https://brainly-the-second-brain-client.vercel.app',
-            'http://localhost:5173',
-        ];
-        // Allow requests with no origin (like mobile apps or curl requests)
-        if (!origin) return callback(null, true);
-        if (allowedOrigins.indexOf(origin) !== -1) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
-    exposedHeaders: ['Set-Cookie'],
-    maxAge: 86400 // 24 hours
-};
-=======
+
 const allowOrigin= ["https://brainly-the-second-brain-client.vercel.app"]
->>>>>>> d8d59f8f8612cd51bce11ea45f6d155e0709eb1d
 
 // Enable CORS for all routes
 app.use(cors({
-    origin: allowedOrigin ,
+    origin: allowOrigin ,
     credentials: true,
 }));
 
