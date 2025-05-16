@@ -9,7 +9,7 @@ import connectDB from "./config/db"
 import dotenv from "dotenv";
 
 dotenv.config()
-
+const Port = process.env.PORT;
 const app = express();
 
 // Middleware
@@ -22,35 +22,13 @@ app.use(
 app.use(cookieParser())
 
 // CORS configuration
-const corsOptions = {
-    origin: function (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) {
-        const allowedOrigins = [
-            'https://brainly-the-second-brain-client.vercel.app',
-            'http://localhost:5173',
-            'http://localhost:3000',
-            'http://127.0.0.1:5173',
-            'http://127.0.0.1:3000'
-        ];
-        // Allow requests with no origin (like mobile apps or curl requests)
-        if (!origin) return callback(null, true);
-        if (allowedOrigins.indexOf(origin) !== -1) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
-    exposedHeaders: ['Set-Cookie'],
-    maxAge: 86400 // 24 hours
-};
+const allowOrigin= ["https://brainly-the-second-brain-client.vercel.app"]
 
 // Enable CORS for all routes
-app.use(cors(corsOptions));
-
-// Handle preflight requests
-app.options('*', cors(corsOptions));
+app.use(cors({
+    origin: allowedOrigin ,
+    credentials: true,
+}));
 
 // Routes
 app.use("/api/user", userRouter);
